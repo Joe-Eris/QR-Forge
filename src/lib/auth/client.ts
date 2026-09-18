@@ -1,7 +1,7 @@
 import { genericOAuthClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { runPreSignInSignOut, runSignOut } from "../../../scripts/sign-out-plan.mjs";
-import { GROK_PROVIDERS } from "./providers";
+import { OAUTH_PROVIDERS } from "./providers";
 
 /**
  * Better Auth client for this React SPA (browser-side).
@@ -30,22 +30,19 @@ export const authClient = createAuthClient({
 
 /**
  * True when sign-in UI should be shown — i.e. whenever `VITE_AUTH_ENABLED` is
- * not `"false"`. The shipped template sets it to `"false"`
- * (`.grok/app-env.json`), which selects the dev user (see `use-current-user`);
- * with the key removed, sign-in is real in preview (baked preview client) and
- * when deployed (injected per-app client).
+ * not `"false"`. When the key is omitted, sign-in is real.
  */
 export const authEnabled = import.meta.env.VITE_AUTH_ENABLED !== "false";
 
 /** The upstream providers to render sign-in buttons for. */
-export { GROK_PROVIDERS };
+export { OAUTH_PROVIDERS };
 
 // ── Live-preview bearer token ────────────────────────────────────────────────
 // The embedded preview iframe has partitioned cookies, so we keep the session's
 // bearer token in sessionStorage and attach it to every Better Auth request (and
 // to server functions, via `@/lib/auth/middleware`). Empty everywhere except the
 // preview after a popup sign-in, so the cookie path is untouched elsewhere.
-const BEARER_KEY = "grok-auth.bearer-token";
+const BEARER_KEY = "eris-auth.bearer-token";
 
 /** The stored preview bearer token, or null. */
 export function getBearerToken(): string | null {
@@ -68,9 +65,7 @@ function setBearerToken(token: string | null): void {
 }
 
 /**
- * The sandbox live preview runs this app inside an iframe on a `*.grok-sandbox.com`
- * host, where a full-page redirect to the broker can't work — so sign-in uses a
- * popup there and a normal redirect everywhere else.
+ * Sign-in uses a popup when the app is framed; otherwise a normal redirect.
  */
 function inLivePreview(): boolean {
   return (
@@ -80,21 +75,11 @@ function inLivePreview(): boolean {
 }
 
 /** Message the popup posts back to the opener once sign-in completes. */
-type PopupMessage = { source: "grok-auth-popup"; token: string | null; error?: string };
+type PopupMessage = { source: "auth-popup"; token: string | null; error?: string };
 
 /**
- * Start sign-in with one upstream provider (`providerId` from `GROK_PROVIDERS`),
- * federating through the Grok auth broker.
- *
- * - **Live preview** (`*.grok-sandbox.com` iframe): opens a POPUP to
- *   `/auth/popup`, served by the template Vite plugin (see `vite.config.ts` +
- *   `popup.server.ts`) — 302s to the broker/upstream login (no app chrome) and,
- *   on return, posts the session bearer token back. We store it and refresh the
- *   session; no top-level navigation of the iframe to the broker.
- * - **Deployed** (and local non-iframe): a normal full-page redirect into the broker.
- *
- * Either way it clears any existing local session FIRST so switching providers
- * actually switches identity.
+ * Start sign-in with one social provider from `OAUTH_PROVIDERS`.
+ * Framed apps use a popup; otherwise a full-page redirect.
  */
 export async function signIn(
   providerId: string,
@@ -165,7 +150,7 @@ function openSignInPopup(providerId: string): Window | null {
   const origin = window.location.origin;
   const url = `${origin}/auth/popup?providerId=${encodeURIComponent(providerId)}`;
   // Unique name per attempt so a prior attempt stuck on the SPA is not reused.
-  const name = `grok-signin-${Date.now()}`;
+  const name = `auth-signin-${Date.now()}`;
   return window.open(url, name, "popup,width=500,height=650");
 }
 
@@ -187,7 +172,7 @@ function waitForPopupToken(popup: Window): Promise<string | null> {
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== origin) return;
       const data = event.data as PopupMessage | undefined;
-      if (!data || data.source !== "grok-auth-popup") return;
+      if (!data || data.source !== "auth-popup") return;
       settle(data.token ?? null);
     };
     // Fallback when the user dismisses the popup. Grace period lets the

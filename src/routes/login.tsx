@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
+import { OAUTH_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
 import { SiteShell } from "@/components/layout/site-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,7 +81,7 @@ function LoginPage() {
           <CardContent className="grid gap-3">
             {authEnabled ? (
               <>
-                {GROK_PROVIDERS.map((p) => (
+                {OAUTH_PROVIDERS.map((p) => (
                   <Button
                     key={p.providerId}
                     type="button"

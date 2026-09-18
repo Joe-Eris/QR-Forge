@@ -18,7 +18,7 @@ import {
 assertAppDataServerOnly("app-data/client.server");
 
 export const CONNECTORS_HOST_STAGING = "connectors.app-builder-testing.com";
-export const CONNECTORS_HOST_PROD = "connectors.grok.me";
+export const CONNECTORS_HOST_PROD = "";
 
 function isLoopbackHost(host: string): boolean {
   return host === "localhost" || host === "127.0.0.1" || host === "[::1]";

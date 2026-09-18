@@ -4,11 +4,10 @@ export function env(key: string): string | undefined {
 }
 
 /**
- * Workspace preview vs deployed app. The deployer writes GROK_PROJECT_ID on
- * every publish; the sandbox preview never has it. Single source of truth for
- * the split — gate audience, gate endpoints and connector-token semantics all
- * key off this predicate.
+ * Local sandbox vs a real deploy (Vercel). Vercel sets `VERCEL=1`.
+ * Gate audience and connector-token semantics key off this.
  */
 export function isWorkspacePreview(): boolean {
+  if (env("VERCEL") || env("BETTER_AUTH_URL")) return false;
   return !env("GROK_PROJECT_ID");
 }
