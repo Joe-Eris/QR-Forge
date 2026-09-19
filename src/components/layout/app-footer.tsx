@@ -11,6 +11,8 @@ const LINKS = [
   { to: "/privacy" as const, hash: "contact", label: "Contact" },
 ];
 
+const GITHUB_REPO = "https://github.com/Joe-Eris/QR-Forge";
+
 export function AppFooter() {
   return (
     <footer className="border-t border-border bg-background">
@@ -28,6 +30,9 @@ export function AppFooter() {
                 {l.label}
               </Link>
             ))}
+            <a href={GITHUB_REPO} target="_blank" rel="noreferrer" className="hover:text-foreground">
+              GitHub
+            </a>
           </nav>
         </div>
         <div className="flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">

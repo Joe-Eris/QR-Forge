@@ -4,6 +4,8 @@ Static QR codes in the browser. A product of **Eris — Evolving Innovation**.
 
 Create, preview, download, and scan QR codes without an account. Sign in only if you want a library that follows you across devices.
 
+**Live:** [qrforge-sigma.vercel.app](https://qrforge-sigma.vercel.app)
+
 ## What it does
 
 - **Create** — URL, text, Wi-Fi, vCard, email, SMS, phone, geo
