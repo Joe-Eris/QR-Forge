@@ -61,7 +61,7 @@ export function LandingPage() {
     <div className="flex flex-col gap-20 pb-8">
       <section className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,400px)]">
         <div>
-          <p className="text-xs font-medium tracking-[0.2em] text-primary uppercase">QR workspace · Eris</p>
+          <p className="text-xs font-medium tracking-[0.2em] text-primary uppercase">URL · Wi-Fi · vCard · scan</p>
           <h1 className="mt-3 font-display text-5xl font-medium leading-[1.05] tracking-tight text-foreground sm:text-6xl">
             Create scannable QR codes in the browser.
           </h1>

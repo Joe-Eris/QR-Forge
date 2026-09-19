@@ -14,7 +14,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "QRForge — QR codes without the junk" },
+      { title: "QRForge — create and scan QR codes" },
       {
         name: "description",
         content:

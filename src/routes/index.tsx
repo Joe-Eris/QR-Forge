@@ -5,7 +5,7 @@ import { LandingPage } from "@/components/landing/landing-page";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "QRForge — QR codes without the junk" },
+      { title: "QRForge — create and scan QR codes" },
       {
         name: "description",
         content:
